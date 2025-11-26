@@ -8,33 +8,33 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 215 25% 15%;
+    --background: 220 40% 98%;
+    --foreground: 220 20% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 220 20% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 220 20% 20%;
 
-    --primary: 173 58% 39%;
+    --primary: 212 100% 48%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 142 76% 36%;
+    --secondary: 220 30% 25%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 220 20% 95%;
+    --muted-foreground: 220 15% 50%;
 
-    --accent: 173 80% 40%;
+    --accent: 212 95% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 173 58% 39%;
+    --border: 220 20% 88%;
+    --input: 220 25% 18%;
+    --ring: 212 100% 48%;
 
     --radius: 0.75rem;
     
@@ -45,61 +45,60 @@ All colors MUST be HSL.
     --aqi-very-poor: 0 84% 60%;
     --aqi-severe: 25 75% 27%;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(173, 58%, 39%), hsl(142, 76%, 36%));
-    --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    /* Enhanced Gradients */
+    --gradient-primary: linear-gradient(90deg, hsl(212, 100%, 48%), hsl(212, 95%, 60%));
+    --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    --gradient-bg: linear-gradient(135deg, hsl(220, 40%, 8%) 0%, hsl(220, 35%, 12%) 100%);
     
-    /* Shadows */
-    --shadow-lg: 0 20px 40px -12px rgba(13, 148, 136, 0.15);
-    --shadow-xl: 0 25px 50px -12px rgba(13, 148, 136, 0.25);
+    /* Refined Shadows */
+    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --shadow-glow: 0 0 40px rgba(56, 189, 248, 0.15);
+    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 215 25% 8%;
-    --foreground: 210 40% 98%;
+    --background: 220 40% 8%;
+    --foreground: 220 15% 95%;
 
-    --card: 215 25% 12%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 30% 12%;
+    --card-foreground: 220 15% 95%;
 
-    --popover: 215 25% 12%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 30% 12%;
+    --popover-foreground: 220 15% 95%;
 
-    --primary: 173 58% 39%;
+    --primary: 212 100% 48%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 142 76% 36%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 220 25% 20%;
+    --secondary-foreground: 220 15% 95%;
 
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 220 25% 18%;
+    --muted-foreground: 220 15% 65%;
 
-    --accent: 173 80% 40%;
+    --accent: 212 95% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 173 58% 39%;
+    --border: 220 25% 20%;
+    --input: 220 25% 18%;
+    --ring: 212 100% 48%;
     
-    --gradient-card: linear-gradient(145deg, rgba(26, 32, 44, 0.9), rgba(26, 32, 44, 0.7));
+    /* Dark Mode Gradients */
+    --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    --gradient-bg: linear-gradient(135deg, hsl(220, 40%, 8%) 0%, hsl(220, 35%, 12%) 100%);
+    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -117,6 +116,30 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: var(--gradient-bg);
+    min-height: 100vh;
+  }
+}
+
+/* Glass-morphism utilities */
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-glass);
+  }
+  
+  .glass-input {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .glass-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
   }
 }
