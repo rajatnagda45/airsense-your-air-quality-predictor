@@ -1,140 +1,127 @@
 import { Navbar } from "@/components/Navbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertCircle, Heart, Leaf, Shield } from "lucide-react";
+import { Wind, Brain, TrendingUp } from "lucide-react";
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Navbar />
       
-      <main className="max-w-6xl mx-auto px-4 py-12">
+      <main className="max-w-4xl mx-auto px-4 py-24">
         <div className="text-center mb-12 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             About AirSense
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Your intelligent companion for understanding and predicting air quality
+          <p className="text-lg text-muted-foreground">
+            Understanding Air Quality Index Prediction
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <Card className="shadow-lg hover:shadow-xl transition-shadow">
+        <div className="space-y-6">
+          <Card className="glass-card border-border/50 shadow-glass animate-fade-in">
             <CardHeader>
-              <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                <Leaf className="w-6 h-6 text-primary" />
-              </div>
-              <CardTitle>Our Mission</CardTitle>
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <Brain className="w-6 h-6 text-primary" />
+                How It Works
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                AirSense is dedicated to making air quality data accessible and understandable for everyone. 
-                We use advanced machine learning models to predict Air Quality Index (AQI) based on various 
-                pollutant measurements, helping communities make informed decisions about their health and environment.
+            <CardContent className="space-y-4 text-muted-foreground">
+              <p>
+                AirSense uses advanced machine learning algorithms to predict Air Quality Index (AQI) 
+                based on real-time pollutant measurements. Our model analyzes six key air pollutants 
+                to provide accurate predictions.
+              </p>
+              <p>
+                The system processes measurements of PM2.5, PM10, NO₂, SO₂, CO, and Ozone through 
+                a Random Forest regression model trained on extensive air quality datasets.
               </p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg hover:shadow-xl transition-shadow">
+          <Card className="glass-card border-border/50 shadow-glass animate-fade-in">
             <CardHeader>
-              <div className="bg-secondary/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                <Shield className="w-6 h-6 text-secondary" />
-              </div>
-              <CardTitle>How It Works</CardTitle>
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <TrendingUp className="w-6 h-6 text-primary" />
+                AQI Categories
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Our predictive model analyzes six key air quality parameters: PM2.5, PM10, NO₂, SO₂, CO, and Ozone. 
-                Using a Random Forest Regressor trained on extensive air quality datasets, we provide accurate 
-                AQI predictions that help you understand the air you breathe.
-              </p>
+            <CardContent className="space-y-3">
+              {[
+                { 
+                  range: "0-50", 
+                  category: "Good", 
+                  color: "#16a34a",
+                  desc: "Air quality is satisfactory, and air pollution poses little or no risk"
+                },
+                { 
+                  range: "51-100", 
+                  category: "Moderate", 
+                  color: "#facc15",
+                  desc: "Air quality is acceptable for most, but sensitive individuals may experience minor concerns"
+                },
+                { 
+                  range: "101-200", 
+                  category: "Poor", 
+                  color: "#fb923c",
+                  desc: "Members of sensitive groups may experience health effects"
+                },
+                { 
+                  range: "201-300", 
+                  category: "Very Poor", 
+                  color: "#ef4444",
+                  desc: "Health alert: everyone may experience more serious health effects"
+                },
+                { 
+                  range: "300+", 
+                  category: "Severe", 
+                  color: "#7c2d12",
+                  desc: "Health warnings of emergency conditions. The entire population is more likely to be affected"
+                },
+              ].map((item) => (
+                <div 
+                  key={item.category}
+                  className="glass-input p-4 rounded-lg border-l-4 transition-all hover:scale-[1.01]"
+                  style={{ borderLeftColor: item.color }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-foreground">{item.range}</span>
+                    <span className="font-bold" style={{ color: item.color }}>
+                      {item.category}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="glass-card border-border/50 shadow-glass animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <Wind className="w-6 h-6 text-primary" />
+                Measured Pollutants
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid md:grid-cols-2 gap-4">
+              {[
+                { name: "PM2.5", desc: "Fine particulate matter (≤2.5 micrometers)" },
+                { name: "PM10", desc: "Coarse particulate matter (≤10 micrometers)" },
+                { name: "NO₂", desc: "Nitrogen Dioxide" },
+                { name: "SO₂", desc: "Sulfur Dioxide" },
+                { name: "CO", desc: "Carbon Monoxide" },
+                { name: "Ozone", desc: "Ground-level ozone (O₃)" },
+              ].map((pollutant) => (
+                <div 
+                  key={pollutant.name}
+                  className="glass-input p-3 rounded-lg border-border/30"
+                >
+                  <div className="font-semibold text-primary">{pollutant.name}</div>
+                  <div className="text-sm text-muted-foreground">{pollutant.desc}</div>
+                </div>
+              ))}
             </CardContent>
           </Card>
         </div>
-
-        <Card className="shadow-xl mb-12">
-          <CardHeader>
-            <CardTitle className="text-2xl">Understanding AQI Categories</CardTitle>
-            <CardDescription>What the different Air Quality Index levels mean</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {[
-              {
-                range: "0-50",
-                category: "Good",
-                icon: "😄",
-                color: "#16a34a",
-                description: "Air quality is satisfactory, and air pollution poses little or no risk.",
-              },
-              {
-                range: "51-100",
-                category: "Moderate",
-                icon: "🙂",
-                color: "#facc15",
-                description: "Air quality is acceptable. However, there may be a risk for some people, particularly those who are unusually sensitive to air pollution.",
-              },
-              {
-                range: "101-200",
-                category: "Poor",
-                icon: "😷",
-                color: "#fb923c",
-                description: "Members of sensitive groups may experience health effects. The general public is less likely to be affected.",
-              },
-              {
-                range: "201-300",
-                category: "Very Poor",
-                icon: "🤒",
-                color: "#ef4444",
-                description: "Health alert: The risk of health effects is increased for everyone. Active children and adults, and people with respiratory disease should avoid prolonged outdoor exertion.",
-              },
-              {
-                range: "300+",
-                category: "Severe",
-                icon: "☠️",
-                color: "#7c2d12",
-                description: "Health warning of emergency conditions: everyone is more likely to be affected. Everyone should avoid all outdoor exertion.",
-              },
-            ].map((item) => (
-              <div
-                key={item.category}
-                className="border rounded-lg p-6 hover:shadow-md transition-shadow"
-                style={{ borderLeftWidth: "6px", borderLeftColor: item.color }}
-              >
-                <div className="flex items-start gap-4">
-                  <span className="text-4xl">{item.icon}</span>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-bold" style={{ color: item.color }}>
-                        {item.category}
-                      </h3>
-                      <span className="text-sm bg-muted px-2 py-1 rounded">
-                        AQI {item.range}
-                      </span>
-                    </div>
-                    <p className="text-muted-foreground">{item.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-lg bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Heart className="w-6 h-6 text-primary" />
-              <CardTitle>Why Air Quality Matters</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground leading-relaxed">
-              Poor air quality can have serious health impacts, affecting your respiratory system, 
-              cardiovascular health, and overall wellbeing. By monitoring and predicting AQI, 
-              we empower you to make informed decisions about outdoor activities, plan your day effectively, 
-              and take necessary precautions to protect yourself and your loved ones. Understanding air quality 
-              is the first step toward breathing easier and living healthier.
-            </p>
-          </CardContent>
-        </Card>
       </main>
     </div>
   );

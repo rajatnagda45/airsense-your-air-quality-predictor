@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wind, Droplet, Cloud, AlertCircle } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { Wind, Droplet, Cloud, AlertCircle, Sparkles } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface PredictionResult {
   aqi: number;
@@ -52,6 +52,7 @@ const simulateAQIPrediction = (data: FormData): number => {
 };
 
 export const AQIPredictor = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<FormData>({
     pm25: "",
     pm10: "",
@@ -108,46 +109,88 @@ export const AQIPredictor = () => {
     { name: "ozone", label: "Ozone (ppb)", icon: Wind, placeholder: "e.g., 60.0" },
   ];
 
+  const fillSampleData = () => {
+    setFormData({
+      pm25: "35.5",
+      pm10: "50.2",
+      no2: "40.0",
+      so2: "10.0",
+      co: "0.5",
+      ozone: "60.0",
+    });
+    toast({
+      title: "Sample data loaded",
+      description: "Click 'Predict AQI' to see results",
+    });
+  };
+
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8">
-      <div className="grid md:grid-cols-2 gap-8">
+    <div className="w-full max-w-6xl mx-auto px-4">
+      <div className="grid lg:grid-cols-2 gap-6">
         {/* Input Form */}
-        <Card className="shadow-lg">
+        <Card className="glass-card border-border/50 shadow-glass">
           <CardHeader>
-            <CardTitle className="text-2xl">Air Quality Parameters</CardTitle>
-            <CardDescription>Enter the air quality measurements</CardDescription>
+            <CardTitle className="text-2xl flex items-center gap-2">
+              <Cloud className="w-6 h-6 text-primary" />
+              Air Quality Parameters
+            </CardTitle>
+            <CardDescription className="text-muted-foreground">
+              Enter pollutant measurements to predict AQI
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {inputFields.map((field) => {
-                const Icon = field.icon;
-                return (
-                  <div key={field.name} className="space-y-2">
-                    <Label htmlFor={field.name} className="flex items-center gap-2">
-                      <Icon className="w-4 h-4 text-primary" />
-                      {field.label}
-                    </Label>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="number"
-                      step="0.1"
-                      placeholder={field.placeholder}
-                      value={formData[field.name as keyof FormData]}
-                      onChange={handleInputChange}
-                      className="transition-all focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
-                );
-              })}
+              <div className="grid grid-cols-2 gap-4">
+                {inputFields.map((field) => {
+                  const Icon = field.icon;
+                  return (
+                    <div key={field.name} className="space-y-2">
+                      <Label 
+                        htmlFor={field.name} 
+                        className="flex items-center gap-2 text-sm font-medium"
+                      >
+                        <Icon className="w-4 h-4 text-primary" />
+                        {field.label}
+                      </Label>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="number"
+                        step="0.1"
+                        placeholder={field.placeholder}
+                        value={formData[field.name as keyof FormData]}
+                        onChange={handleInputChange}
+                        className="glass-input text-foreground placeholder:text-muted-foreground/50"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
               
-              <Button 
-                type="submit" 
-                className="w-full mt-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
-                disabled={isLoading}
-              >
-                {isLoading ? "Calculating..." : "Predict AQI"}
-              </Button>
+              <div className="flex gap-3 pt-4">
+                <Button 
+                  type="submit" 
+                  className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all shadow-lg"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2 animate-spin" />
+                      Calculating...
+                    </>
+                  ) : (
+                    "Predict AQI"
+                  )}
+                </Button>
+                <Button 
+                  type="button"
+                  variant="outline"
+                  onClick={fillSampleData}
+                  className="glass-input border-border/50 hover:border-primary"
+                >
+                  Try sample
+                </Button>
+              </div>
             </form>
           </CardContent>
         </Card>
@@ -156,56 +199,89 @@ export const AQIPredictor = () => {
         <div className="space-y-6">
           {prediction ? (
             <Card 
-              className="shadow-xl animate-fade-in"
-              style={{ 
-                borderLeft: `6px solid ${prediction.color}`,
-                background: `linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85))`
-              }}
+              className="glass-card border-border/50 shadow-glass animate-fade-in relative overflow-hidden"
             >
-              <CardHeader className="text-center pb-4">
-                <div className="text-6xl mb-4 animate-scale-in">{prediction.emoji}</div>
-                <CardTitle className="text-4xl font-bold" style={{ color: prediction.color }}>
+              <div 
+                className="absolute inset-0 opacity-10"
+                style={{ 
+                  background: `linear-gradient(135deg, ${prediction.color}22, transparent)` 
+                }}
+              />
+              <CardHeader className="text-center pb-4 relative z-10">
+                <div className="text-7xl mb-4 animate-scale-in drop-shadow-lg">
+                  {prediction.emoji}
+                </div>
+                <CardTitle 
+                  className="text-4xl font-bold"
+                  style={{ color: prediction.color }}
+                >
                   {prediction.category}
                 </CardTitle>
-                <CardDescription className="text-lg mt-2">Air Quality Index</CardDescription>
+                <CardDescription className="text-base mt-2 text-muted-foreground">
+                  Air Quality Index
+                </CardDescription>
               </CardHeader>
-              <CardContent className="text-center">
-                <div className="bg-muted/50 rounded-lg p-8 mb-6">
-                  <div className="text-6xl font-bold" style={{ color: prediction.color }}>
+              <CardContent className="text-center relative z-10">
+                <div className="glass-input rounded-2xl p-8 mb-6 border-border/50">
+                  <div 
+                    className="text-7xl font-bold mb-2"
+                    style={{ color: prediction.color }}
+                  >
                     {prediction.aqi}
                   </div>
-                  <div className="text-sm text-muted-foreground mt-2">AQI Value</div>
+                  <div className="text-sm text-muted-foreground">AQI Value</div>
                 </div>
                 
                 <div className="space-y-3 text-left">
-                  <h3 className="font-semibold text-lg mb-3">Your Input Values:</h3>
+                  <h3 className="font-semibold text-base mb-3 text-foreground">
+                    Input Values:
+                  </h3>
                   <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="bg-muted/30 p-2 rounded">PM2.5: {formData.pm25} μg/m³</div>
-                    <div className="bg-muted/30 p-2 rounded">PM10: {formData.pm10} μg/m³</div>
-                    <div className="bg-muted/30 p-2 rounded">NO₂: {formData.no2} ppb</div>
-                    <div className="bg-muted/30 p-2 rounded">SO₂: {formData.so2} ppb</div>
-                    <div className="bg-muted/30 p-2 rounded">CO: {formData.co} ppm</div>
-                    <div className="bg-muted/30 p-2 rounded">Ozone: {formData.ozone} ppb</div>
+                    {[
+                      { label: "PM2.5", value: formData.pm25, unit: "μg/m³" },
+                      { label: "PM10", value: formData.pm10, unit: "μg/m³" },
+                      { label: "NO₂", value: formData.no2, unit: "ppb" },
+                      { label: "SO₂", value: formData.so2, unit: "ppb" },
+                      { label: "CO", value: formData.co, unit: "ppm" },
+                      { label: "Ozone", value: formData.ozone, unit: "ppb" },
+                    ].map((item) => (
+                      <div 
+                        key={item.label}
+                        className="glass-input p-3 rounded-lg border-border/30"
+                      >
+                        <span className="font-medium text-foreground">{item.label}:</span>{" "}
+                        <span className="text-muted-foreground">
+                          {item.value} {item.unit}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </CardContent>
             </Card>
           ) : (
-            <Card className="shadow-lg border-dashed border-2">
-              <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                <Wind className="w-16 h-16 text-muted-foreground mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Ready to Predict</h3>
-                <p className="text-muted-foreground">
-                  Fill in the air quality parameters and click "Predict AQI" to see results
+            <Card className="glass-card border-dashed border-2 border-border/30 shadow-glass">
+              <CardContent className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="glass-input p-6 rounded-full mb-4 border-border/30">
+                  <Wind className="w-12 h-12 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-foreground">
+                  Ready to Predict
+                </h3>
+                <p className="text-muted-foreground max-w-sm">
+                  Fill in the parameters and click "Predict AQI" to see results
                 </p>
               </CardContent>
             </Card>
           )}
 
           {/* AQI Reference Guide */}
-          <Card className="shadow-lg">
+          <Card className="glass-card border-border/50 shadow-glass">
             <CardHeader>
-              <CardTitle className="text-lg">AQI Categories</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2 text-foreground">
+                <AlertCircle className="w-5 h-5 text-primary" />
+                AQI Categories
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {[
@@ -217,10 +293,10 @@ export const AQIPredictor = () => {
               ].map((item) => (
                 <div 
                   key={item.category}
-                  className="flex items-center justify-between p-3 rounded-lg"
-                  style={{ borderLeft: `4px solid ${item.color}`, backgroundColor: `${item.color}10` }}
+                  className="flex items-center justify-between p-3 rounded-lg glass-input border-l-4 transition-all hover:scale-[1.02]"
+                  style={{ borderLeftColor: item.color }}
                 >
-                  <span className="font-medium">{item.range}</span>
+                  <span className="font-medium text-foreground">{item.range}</span>
                   <span className="font-semibold" style={{ color: item.color }}>
                     {item.category}
                   </span>
